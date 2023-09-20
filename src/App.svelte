@@ -1,15 +1,11 @@
 <script>
   import { onMount } from "svelte";
-  import { writable } from "svelte/store";
 
   import * as vg from "@uwdata/vgplot";
 
-  let slideElement;
   let chartElement;
-  let clicked = false;
 
   let rightHeight = 135;
-  let highlightColor = "white ";
   let strokeColor = "black";
 
   onMount(async () => {
@@ -22,27 +18,16 @@
         )
       );
 
-    const $click = vg.Selection.single();
     const $domainSex = vg.Param.array(["MALE", "FEMALE"]);
     const $domainIsland = vg.Param.array(["Torgersen", "Biscoe", "Dream"]);
     const $domainSpecies = vg.Param.array(["Adelie", "Chinstrap", "Gentoo"]);
     const $colors = vg.Param.array(["skyblue", "coral", "teal"]);
-    const $query = vg.Selection.intersect();
 
     const $brush = vg.Selection.single();
     const $bandwidth = vg.Param.value(10);
 
-    // $brush.addEventListener("value", (v) => (clicked = true));
     $brush.addEventListener("activate", (a) => {
       console.log("Activate!", a);
-    });
-
-    const slide = vg.menu({
-      label: "Species",
-      as: $query,
-      from: "penguins",
-      column: "species",
-      value: "Adelie",
     });
 
     const chart = vg.vconcat(
@@ -67,16 +52,6 @@
               strokeWidth: 1,
               tip: true,
             }),
-            // vg.voronoi(vg.from("penguins"), {
-            //   x: "bill_length",
-            //   y: "bill_depth",
-            //   stroke: "black",
-            //   strokeWidth: 0,
-            //   inset: 1,
-            //   fill: "species",
-            //   fillOpacity: 0.4,
-            // }),
-
             vg.inset(4),
             vg.width(750),
             vg.height(650),
@@ -88,7 +63,6 @@
             vg.colorDomain($domainSpecies),
             vg.colorRange($colors)
           )
-          // vg.table({ from: "penguins", height: 200, filterBy: $brush })
         ),
         vg.vconcat(
           vg.hconcat(
@@ -199,21 +173,10 @@
       )
     );
 
-    // bill_length,bill_depth,flipper_length,body_mass,sex
-
-    // Assuming vgplot provides a method to attach to DOM
     chartElement.appendChild(chart);
-    slideElement.appendChild(slide);
   });
 </script>
 
 <div class="container">
-  <!-- <div bind:this={slideElement} /> -->
   <div bind:this={chartElement} />
 </div>
-
-<style>
-  path {
-    fill: black;
-  }
-</style>
