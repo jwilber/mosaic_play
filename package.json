@@ -16,6 +16,8 @@
   },
   "dependencies": {
     "@uwdata/vgplot": "^0.3.3",
+    "nodemon": "^3.0.1",
+    "ws": "^8.14.2",
     "yaml": "^2.3.2"
   }
 }
